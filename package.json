@@ -1,0 +1,16 @@
+{
+  "name": "OpenDataHackdayBackend",
+  "version": "1.0.0",
+  "description": "backend for the open data hackday 2014 website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christian Schulze",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.9.0",
+    "express": "^4.9.5",
+    "mongoose": "^3.8.17"
+  }
+}
