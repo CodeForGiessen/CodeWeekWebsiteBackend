@@ -7,12 +7,13 @@ var bodyParser = require('body-parser');
 // CORS
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
     // intercept OPTIONS method
     if ('OPTIONS' == req.method) {
-      res.send(200);
+      res.status(200);
+      res.send();
     }
     else {
       next();
@@ -49,11 +50,41 @@ router.route('/attendee')
 		attendee.mail = req.body['signup-mail'];
 		attendee.role = req.body['signup-role'];
 
-		attendee.save(function(err) {
+		attendee.save(function(err, obj) {
 			if (err)
 				res.send(err);
-			res.json({ 'message': 'attendee created' })
+
+			res.json({
+				'oid':  obj.id
+			});
 		});
+	})
+	.get(function(req, res) {
+		Attendee.find({}, function(err, docs) {
+			var out = 'Attendants: ' + docs.length + '\n';
+
+			for (var doc in docs) {
+				out += 'Name: ' + doc.name + '\n';
+			}
+
+			res.send(out);
+		})
+	});
+
+router.route('/attendee/:attendee_id')
+	// remove attendant
+	.delete(function(req, res) {
+		Attendee.remove({
+			'_id': req.params.attendee_id
+		}, function(err, obj) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json({
+					'message': 'successfully removed attendant'
+				});
+			}
+		})
 	});
 
 app.use('/', router);
