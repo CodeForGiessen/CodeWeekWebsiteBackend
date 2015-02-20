@@ -29,7 +29,9 @@ var port = process.env.PORT || 3333;
 
 // Database & ORM-Mapper
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017');
+var mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017';
+
+mongoose.connect(mongoUri);
 
 // Models
 var Attendee = require('./app/models/attendee');
